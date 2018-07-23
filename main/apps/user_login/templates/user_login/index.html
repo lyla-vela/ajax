@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+           
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <style>
+                
+                button{width: 70px;
+                      height: 30px;
+                }
+            </style>
+    <title>
+        Ajax demo 1
+    </title>
+    </head>
+    <body>
+        <main role="main">
+        <h2>Ajax demo 1</h2>
+        
+            <div class="row">
+                <div>
+                    <h1>Demo 1</h1>
+                    <button id='button_json'class="btn btn-primary btn-lg btn-block" style="display:inline-block; width:350px; height:42px; margin-left:80px;">Fetch httresponse from user_login/all.json</button>
+                    <button id='button_html' class="btn btn-primary btn-lg btn-block" style="display:inline-block; width:350px; height:42px; margin-left:80px;">Fetch httresponse from user_login/all.html</button>
+                    <div id='placeholder1'style='margin-top:50px; margin-left:50px; border:1px solid silver; padding:10px; width:700px; '>Placeholder for Ajax content</div>
+                    <div id='weather' style="width:300px; height:300px;"></div>
+                </div>
+               
+            </div>
+            <!-- <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button> -->
+      
+
+        </main>
+        
+        <script>
+            $('#button_json').click(function(){
+                console.log('This button was clicked!')
+                $.ajax({
+                    url:'/user_login/all.json', 
+                    success: function(serverResponse){
+                        console.log('success, serverResponse:',serverResponse)
+                        $('#placeholder1').html(JSON.stringify(serverResponse))
+                    }
+                })
+            });
+            $('#button_html').click(function(){
+                console.log('This button was clicked.. html button')
+                $.ajax({
+                    url:'/user_login/all.html',
+                    success:function(serverResponse){
+                        console.log('success, serverResponse:', serverResponse)
+                        $('#placeholder1').html(serverResponse)
+                    }
+
+                })
+            });
+        
+        </script>
+        <h3>Demo 2</h3>
+        <form action='/user_login/find' method='post'>
+            <p></p>
+        </form>
+        <h1>Demo 2 - Ajax Form</h1>
+        <form action='/user_login/find' method='post' class='ajax_form'>
+          Find all users whose first name starts with
+            {% csrf_token %}
+            <input type='text' name='first_name_starts_with' id='ajax_first_name' />
+        </form>
+        <div id='placeholder2' style='margin-top:35px; border:1px solid silver; width:750px; padding:10px;'>
+            Placeholder for the Ajax Form
+        </div>
+        <script>
+          $('.ajax_form').submit(function(e){
+            e.preventDefault()
+          })
+          $('#ajax_first_name').keyup(function(){
+            console.log('Sending Ajax request to /user_login/find')
+            console.log('Submitting the following data', $(this).parent().serialize())
+            $.ajax({
+              url: '/user_login/find', /* Where should this go? */
+              method: 'post', /* Which HTTP verb? */
+              data: $(this).parent().serialize(), /* Any data to send along? */
+              success: function(serverResponse) { /* What code should we run when the server responds? */
+                $('#placeholder2').html(serverResponse)
+              }
+            })
+          });
+        </script>
+        <h1>Demo 3 - Ajax Form II</h1>
+        <h2>Create a new user</h2>
+        <form action='/user_login/create' method='post' class='ajax_form' id='create_user_ajax_form'>
+            {% csrf_token %}
+            First Name: <input type='text' name='first_name'/>
+            Last Name: <input type='text' name='last_name'/>
+            Email: <input type='text' name='email_address'/>
+            <input type='submit' value='Submit' />
+        </form>
+        <div id='placeholder3' style='margin-top:35px; border:1px solid silver; width:750px; padding:10px;'>
+            Placeholder for the Ajax Form part II
+        </div>
+        <script>
+          $('#create_user_ajax_form').submit(function(e){
+            e.preventDefault()
+            console.log('Sending Ajax request to', $(this).attr('action'))
+            console.log('Submitting the following data', $(this).serialize())
+            $.ajax({
+              url: $(this).attr('action'), /* Where should this go? */
+              method: 'post', /* Which HTTP verb? */
+              data: $(this).serialize(), /* Any data to send along? */
+              success: function(serverResponse) { /* What code should we run when the server responds? */
+                $('#placeholder3').html(serverResponse)
+              }
+            })
+          });
+        </script>
+
+    </body>
+</html>
+

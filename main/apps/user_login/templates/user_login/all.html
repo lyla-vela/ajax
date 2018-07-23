@@ -1,0 +1,23 @@
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>last Name</th>
+            <th>email</th>
+            <th>Age </th>
+            <th>created at</th>
+            <th>updated at</th>
+        </tr>
+    </thead>
+    <tbody>
+            {%for user in users%}
+            <tr>
+            <td style="margin-right:40px;">{{user.first_name}}</td>
+            <th style="margin-right:40px;">{{user.last_name}}</th>
+            <th style="margin-right:40px;">{{user.email}}</th>
+            <th style="margin-right:40px;">{{user.created_at}}</th>
+            <th>{{user.updated_at}}</th>
+            </tr>
+            {%endfor%}
+    </tbody>
+</table>
